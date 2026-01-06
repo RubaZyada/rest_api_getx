@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:restapigetx/core/networking/local_states_codes.dart';
 import 'package:restapigetx/screens/products/view/product_details_page.dart';
 import '../controller/products_controller.dart';
 
@@ -66,7 +67,73 @@ class ProductsPage extends StatelessWidget {
                   child: Center(child: CircularProgressIndicator()),
                 );
               }
-
+               if (controller.errorModel != null) {
+                return SliverFillRemaining(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      await controller.loadProducts();
+                    },
+                    child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.7,
+                        padding: const EdgeInsets.all(20),
+                        child: Center(
+                          child: Container(
+                            padding: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              color: Colors.red[50],
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: const Color.fromARGB(255, 226, 135, 129),
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  controller.errorModel!.icon,
+                                  color: Colors.red,
+                                  size: 40,
+                                ),
+                                const SizedBox(height: 10),
+                                Text(
+                                  controller.errorModel!.errorMessage ?? 'Unknown error',
+                                  style: TextStyle(color: Colors.red[700]),
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 10),
+                                Visibility(
+                                  visible: controller.errorModel!.statuscode ==
+                                      LocalStatusCodes.connectionError,
+                                  child: ElevatedButton.icon(
+                                    onPressed: () {
+                                      controller.loadProducts();
+                                    },
+                                    icon: const Icon(Icons.refresh),
+                                    label: const Text("Retry"),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 24,
+                                        vertical: 12,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }
               return SliverPadding(
                 padding: const EdgeInsets.all(10),
                 sliver: SliverGrid(

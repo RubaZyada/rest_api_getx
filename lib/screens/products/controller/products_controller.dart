@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import '../../../core/networking/api_error_model.dart';
 import '../model/product_model.dart';
 import '../service/products_service.dart';
 
@@ -8,7 +9,7 @@ class ProductsController extends GetxController {
   ProductsController(this.service);
 
   bool isLoading = false;
-  String? error;
+  ApiErrorModel? errorModel;
 
   List<ProductModel> products = [];
   ProductModel? selectedProduct;
@@ -30,7 +31,7 @@ class ProductsController extends GetxController {
         products = (data as List).map((e) => ProductModel.fromJson(e)).toList();
       },
       onError: (err) {
-        error = err.errorMessage;
+        errorModel = err;
       },
     );
 
