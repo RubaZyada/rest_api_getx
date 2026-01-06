@@ -38,22 +38,22 @@ class ProductsController extends GetxController {
     update();
   }
 
-  Future<void> loadDetails(int id) async {
-    isLoading = true;
-    update();
+  // Future<void> loadDetails(int id) async {
+  //   isLoading = true;
+  //   update();
 
-    final result = await service.fetchProductDetails(id);
+  //   final result = await service.fetchProductDetails(id);
 
-    result.when(
-      onSuccess: (data) {
-        selectedProduct = ProductModel.fromJson(data);
-      },
-      onError: (err) {
-        error = err.errorMessage;
-      },
-    );
+  //   result.when(
+  //     onSuccess: (data) {
+  //       selectedProduct = ProductModel.fromJson(data);
+  //     },
+  //     onError: (err) {
+  //       error = err.errorMessage;
+  //     },
+  //   );
 
-    isLoading = false;
-    update();
-  }
+  //   isLoading = false;
+  //   update();
+  // }
 }
